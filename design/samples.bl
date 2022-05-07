@@ -1,0 +1,44 @@
+# Bindings --------------------------------------------------------------------
+
+let x = 42;
+
+let add: Real -> Real -> Real =
+   \x -> y -> x + y;
+
+let increment: Real -> Real =
+   add 1;
+
+let result: Real = 
+   add 7 (increment 5);
+
+
+# Algebraic Data Types --------------------------------------------------------
+
+type Bool =
+   True
+   or False
+
+type BaseColour = 
+   Red
+   or Blue
+   or Green;
+
+type CompositeColour = 
+   Red: Real 
+   and Blue: Real 
+   and Green: Real;
+
+type List a = 
+   Empty
+   or Head: a and Tail: List a;
+
+
+# Refinement Types ------------------------------------------------------------
+
+type PositiveInt =
+   Real where \x -> x >= 0;
+
+let abs: Real -> PositiveInt = 
+   \x -> 
+   if x then -x
+   else x;

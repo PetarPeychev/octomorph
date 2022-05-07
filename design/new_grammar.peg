@@ -1,0 +1,33 @@
+Program = (Statement ";")*
+
+Statement = Binding
+          | TypeDefinition
+          | Expression
+
+Binding = "let" Identifier ":" Type "=" Expression
+
+TypeDefinition = "TypeDefinition"
+
+Expression = "Expression"
+
+Type = Type "->" Type
+     | "Real"
+     | "String"
+     | "Unit"
+     | PolymorphicType
+
+PolymorphicType = Kind Type
+                | TypeVariable
+
+TypeVariable = [a-z]+
+
+Kind = [A-Z]+[a-zA-Z]*
+
+Identifier = [^\s\d]\S*
+
+Literal = Number
+        | "Unit"
+
+Number = ("0" | [1-9] [0-9]*)("." [0-9]+ )?
+
+_ = " " | "\t" | "\n"
