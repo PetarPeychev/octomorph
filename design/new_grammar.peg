@@ -6,13 +6,12 @@ Statement = Binding
 
 Binding = "let" Identifier ":" Type "=" Expression
 
-TypeDefinition = "TypeDefinition"
+TypeDefinition = "type" TypeIdentifier (Type)* "=" (AlgebraicDataType | RefinementType)
 
 Expression = "Expression"
 
 Type = Type "->" Type
      | "Real"
-     | "String"
      | "Unit"
      | PolymorphicType
 

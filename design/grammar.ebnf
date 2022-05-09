@@ -11,7 +11,7 @@
 <TypeDefinition> ::= "type" <ws> <TypeIdentifier> (<ws> <Type>)* <ws> "=" <ws> (<AlgebraicDataType> | <RefinementType>)
 
 <AlgebraicDataType> ::= <ADTElement> <ws> "and" <ws> <AlgebraicDataType>
-                      | <ADTElement> <ws> "or" <ws> <AlgebraicDataType> 
+                      | <ADTElement> <ws> "or" <ws> <AlgebraicDataType>
                       | <ADTElement>
 
 <ADTElement> ::= <TypeIdentifier> (":" <ws> <Type>)?
