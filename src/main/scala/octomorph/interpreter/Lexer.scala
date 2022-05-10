@@ -24,10 +24,25 @@ def parseToken(cs: List[Char]): (Token, List[Char]) =
     case ')' :: cs                                => (RPAREN, cs)
     case '\\' :: cs                               => (BSLASH, cs)
     case '=' :: cs                                => (EQUALS, cs)
-    case c :: cs                                  => ???
+    case c :: cs => parseIdentifier(c.toString, cs)
 
 def parseNumber(num: String, cs: List[Char]): (Token, List[Char]) =
   val number = raw"(\"0\" | [1-9] [0-9]*)(\".\" [0-9]+ )?".r
   cs match
     case c :: cs if number.matches(num + c) => parseNumber(num + c, cs)
     case cs                                 => (NUMBER(Real(num)), cs)
+
+def parseIdentifier(id: String, cs: List[Char]): (Token, List[Char]) =
+  cs match
+    case Nil                                      => (extractKeyword(id), cs)
+    case c :: cs if raw"\s".r.matches(c.toString) => (extractKeyword(id), cs)
+    case c :: cs                                  => parseIdentifier(id + c, cs)
+
+def extractKeyword(id: String): Token =
+  id match
+    case "let"  => LET
+    case "Real" => REAL
+    case "Unit" => UNIT
+    case "Void" => VOID
+    case "->"   => ARROW
+    case id     => IDENTIFIER(id)
