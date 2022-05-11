@@ -8,7 +8,7 @@ let add: Real -> Real -> Real =
 let increment: Real -> Real =
    add 1;
 
-let result: Real = 
+let result: Real =
    add 7 (increment 5);
 
 
@@ -18,17 +18,17 @@ type Bool =
    True
    or False
 
-type BaseColour = 
+type BaseColour =
    Red
    or Blue
    or Green;
 
-type CompositeColour = 
-   Red: Real 
-   and Blue: Real 
+type CompositeColour =
+   Red: Real
+   and Blue: Real
    and Green: Real;
 
-type List a = 
+type List a =
    Empty
    or Head: a and Tail: List a;
 
@@ -38,7 +38,72 @@ type List a =
 type PositiveInt =
    Real where \x -> x >= 0;
 
-let abs: Real -> PositiveInt = 
-   \x -> 
+let abs: Real -> PositiveInt =
+   \x ->
    if x then -x
    else x;
+
+# Monadic IO? -----------------------------------------------------------------
+
+type Char =
+  String where \x -> len x < 2;
+
+let getChar: Unit -> IO Char;
+
+let getLine: Unit -> IO String = \u ->
+  let getCharRec: IO List Char -> IO List Char = \cl1 ->
+    let cl2: IO List Char = getChar Unit;
+    map (\x -> cl1 + x) cl2;
+
+  map (\x -> reduce (\x' y' -> x' + y') x) getCharRec IO Empty;
+
+let printChar: Char -> IO Unit;
+
+let printLine: String -> IO Unit = \s ->
+
+# Procedure IO? ---------------------------------------------------------------
+
+p readTextFile: String -> Maybe[String];
+
+// execution order: input -> content -> expression
+let readUserInputFile: Unit -> Maybe[String] =
+  val input: Maybe[String] = prompt "Enter a file path: ";
+
+  val content: Maybe[String] =
+    input
+    when Just path -> readTextFile path
+    when Nothing -> Nothing;
+
+  \u -> content;
+
+// execution order: lazy simultaneous path1, path2
+let readTwoFiles: String -> String -> Pair(Maybe[String], Maybe[String]) =
+  \path1 path2 -> Pair(readTextFile path1, readTextFile path2)
+
+// hmmm -----------------------------------------------------------------------
+
+// These are all declarative definitions. They are added to the symbol table
+// when sequentially, but evaluation is delayed to when necessary and may be
+// left unevaluated. They can be parallelised or memoised
+let x: Real = 42;
+let add: Real -> Real -> Real = \x -> y -> x + y;
+let increment: Real -> Real = add 1;
+let result: Real = add 7 (increment 5);
+
+// These are all imperative ordered procedure calls. For the same local scope
+// they must be executed sequentially and can't be parallelised.
+val prompt: IO[String -> String];
+val input: Maybe[String] = prompt "Enter a file path: ";
+val content: Maybe[String] =
+  input
+  when Just path -> readTextFile path
+  when Nothing -> Nothing;
+
+// Effect Types. If "*" means effectful. If "?" means polymorphic on effect.
+let mapPure:        (a -> b) -> T[a] ->  T[b];
+let mapImpure:      (a -> b*) -> T[a] -> T[b]*;
+let mapPolymorphic: (a -> b?) -> T[a] -> T[b]?;
+
+let add: Real -> Real -> Real;
+let readFile: String -> String;
+let readTwoFiles: String -> String -> String;

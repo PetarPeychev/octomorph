@@ -1,11 +1,9 @@
-Program = (Statement ";")*
+File = (Module | Expression)?
 
-Statement =
-  Expression
-  | Binding
+Module = (Binding ";")*
 
-Expression =
-  "(" Expression ")"
+Expression = (Binding ";")* Expression ";"
+  |"(" Expression ")"
   | "\\" (Identifier)+ "->" Expression
   | (Identifier)*
   | Literal

@@ -34,9 +34,10 @@ def parseNumber(num: String, cs: List[Char]): (Token, List[Char]) =
 
 def parseIdentifier(id: String, cs: List[Char]): (Token, List[Char]) =
   cs match
-    case Nil                                      => (extractKeyword(id), cs)
-    case c :: cs if raw"\s".r.matches(c.toString) => (extractKeyword(id), cs)
-    case c :: cs                                  => parseIdentifier(id + c, cs)
+    case Nil => (extractKeyword(id), cs)
+    case c :: cs if raw"[\s():;\\=]".r.matches(c.toString) =>
+      (extractKeyword(id), c :: cs)
+    case c :: cs => parseIdentifier(id + c, cs)
 
 def extractKeyword(id: String): Token =
   id match

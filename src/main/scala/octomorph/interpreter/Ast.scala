@@ -2,6 +2,16 @@ package octomorph.interpreter.Ast
 
 import spire.math.Real
 
+type ParseResult = Program | Statement | Expression | TypeDefinition |
+  TypeDefinitionBody | AlgebraicDataTypeBody | Type | PolymorphicType |
+  Literal | Identifier | ParseError
+
+case class ParseError(
+    line: Int,
+    col: Int,
+    message: String
+)
+
 opaque type Program = List[Statement]
 object Program:
   def apply(s: List[Statement]): Program = s

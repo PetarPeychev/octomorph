@@ -1,10 +1,10 @@
 let myAdd: Real -> Real -> Real =
-  \ x y -> add x y;
+  \x y -> add x y;
 
 // Parsed as:
-Program = Statement ";"
+Program = Module
 
-Statement = Binding
+Module = Binding ";"
 
 Binding = "let" Identifier ":" Type "=" Expression
 
